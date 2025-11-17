@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 @Slf4j
 public class RedisService {
@@ -29,7 +31,7 @@ public class RedisService {
 
             String data = objectMapper.writeValueAsString(value);
 
-            stringRedisTemplate.opsForValue().set(key, data);
+            stringRedisTemplate.opsForValue().set(key, data, 1L, TimeUnit.MINUTES);
         } catch (JsonProcessingException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There's an error while serializing data: " + e.getMessage());
         }
@@ -40,7 +42,7 @@ public class RedisService {
 
         if(value == null || value.isEmpty()) {
             log.warn("The key is not found or data is empty in Redis: {}", key);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There's an error while deserializing data: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There's an error while deserializing data");
         }
 
         return deserialize(value);
