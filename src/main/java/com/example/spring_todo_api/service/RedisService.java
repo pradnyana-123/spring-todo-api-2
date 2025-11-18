@@ -1,6 +1,6 @@
 package com.example.spring_todo_api.service;
 
-import com.example.spring_todo_api.entity.User;
+import com.example.spring_todo_api.model.UserResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +48,9 @@ public class RedisService {
         return deserialize(value);
     }
 
-    private User deserialize(String data) {
+    private UserResponse deserialize(String data) {
         try {
-           return objectMapper.readValue(data, User.class);
+           return objectMapper.readValue(data, UserResponse.class);
         } catch (JsonProcessingException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There's an error while deserializing data: " + e.getMessage());
         }
