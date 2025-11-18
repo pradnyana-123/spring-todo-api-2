@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +30,13 @@ public class UserController {
        List<User> users = userService.getAll();
 
        return new ResponseEntity<>(WebResponse.builder().message("Users found").status(200).data(users).build(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/api/users/{id}")
+    public ResponseEntity<WebResponse<Object>> findById(@RequestParam Integer id) {
+        Object data = userService.get(id);
+
+        return new ResponseEntity<>(WebResponse.builder().message("User found").status(200).data(data).build(), HttpStatus.OK);
+
     }
 }
