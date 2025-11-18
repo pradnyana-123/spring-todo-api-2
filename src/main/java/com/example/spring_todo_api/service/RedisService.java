@@ -48,7 +48,7 @@ public class RedisService {
         return deserialize(value);
     }
 
-    private UserResponse deserialize(String data) {
+    private Object deserialize(String data) {
         try {
            return objectMapper.readValue(data, UserResponse.class);
         } catch (JsonProcessingException e) {

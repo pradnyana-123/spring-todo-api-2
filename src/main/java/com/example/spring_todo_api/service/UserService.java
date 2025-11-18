@@ -2,6 +2,7 @@ package com.example.spring_todo_api.service;
 
 import com.example.spring_todo_api.entity.User;
 import com.example.spring_todo_api.model.RegisterUserRequest;
+import com.example.spring_todo_api.model.UserResponse;
 import com.example.spring_todo_api.repository.UserRepository;
 import com.example.spring_todo_api.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RedisService redisService;
 
     @Transactional
     public void create(RegisterUserRequest data) {
@@ -46,5 +50,21 @@ public class UserService {
         }
 
         return users;
+    }
+
+    public Object get(Integer id) {
+        String key = String.valueOf(id);
+
+        Object cachedData = redisService.get(key);
+
+        if(cachedData != null) {
+            return cachedData;
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        redisService.save(String.valueOf(id), user);
+
+        return user;
     }
 }
