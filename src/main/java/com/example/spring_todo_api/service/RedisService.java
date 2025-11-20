@@ -31,7 +31,7 @@ public class RedisService {
 
             String data = objectMapper.writeValueAsString(value);
 
-            stringRedisTemplate.opsForValue().set(key, data, 1L, TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set(key, data, 3L, TimeUnit.MINUTES);
         } catch (JsonProcessingException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There's an error while serializing data: " + e.getMessage());
         }
@@ -45,7 +45,6 @@ public class RedisService {
         }
 
        return deserialize(value);
-
     }
 
     private Object deserialize(String data) {
