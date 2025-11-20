@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/api/users/{id}")
-    public ResponseEntity<WebResponse<Object>> findById(@RequestParam Integer id) {
+    public ResponseEntity<WebResponse<Object>> findById(@PathVariable Integer id) {
         Object data = userService.get(id);
 
         return new ResponseEntity<>(WebResponse.builder().message("User found").status(200).data(data).build(), HttpStatus.OK);

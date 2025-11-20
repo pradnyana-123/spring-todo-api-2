@@ -41,11 +41,11 @@ public class RedisService {
         String value = stringRedisTemplate.opsForValue().get(key);
 
         if(value == null || value.isEmpty()) {
-            log.warn("The key is not found or data is empty in Redis: {}", key);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There's an error while deserializing data");
+           return null;
         }
 
-        return deserialize(value);
+       return deserialize(value);
+
     }
 
     private Object deserialize(String data) {
